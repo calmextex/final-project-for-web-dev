@@ -8,89 +8,90 @@ app.use(express.json());  // REST needs JSON MIME type.
 
 
 // CREATE controller ******************************************
-app.post ('/movies', (req,res) => { 
+app.post ('/vinyl', (req,res) => { 
     movies.createVinyl(
         req.body.title,
         req.body.artist, 
         req.body.year, 
         req.body.length
         )
-        .then(movie => {
+        .then(vinyl => {
             res.status(201).json(movie);
         })
         .catch(error => {
             console.log(error);
-            res.status(400).json({ error: 'create a document failed' });
+            res.status(400).json({ error: 'Could not enter a new vinyl record' });
         });
 });
 
 
 // RETRIEVE controller ****************************************************
-app.get('/movies', (req, res) => {
-    movies.retrieveMovies()
-        .then(movie => { 
-            if (movie !== null) {
-                res.json(movie);
+app.get('/vinyl', (req, res) => {
+    movies.retrieveVinyl()
+        .then(vinyl => { 
+            if (vinyl !== null) {
+                res.json(vinyl);
             } else {
-                res.status(404).json({ Error: 'document not found.' });
+                res.status(404).json({ Error: 'Vinyl record not found.' });
             }         
          })
         .catch(error => {
             console.log(error);
-            res.status(400).json({ Error: 'retrieve document failed.' });
+            res.status(400).json({ Error: 'Failed to retrieve vinyl record entry.' });
         });
 });
 
 
 // RETRIEVE by ID controller
-app.get('/movies/:_id', (req, res) => {
-    movies.retrieveMovieByID(req.params._id)
-    .then(movie => { 
-        if (movie !== null) {
-            res.json(movie);
+app.get('/vinyl/:_id', (req, res) => {
+    movies.retrieveVinylByID(req.params._id)
+    .then(vinyl => { 
+        if (vinyl !== null) {
+            res.json(vinyl);
         } else {
-            res.status(404).json({ Error: 'document not found' });
+            res.status(404).json({ Error: 'Vinyl record not found.' });
         }         
      })
     .catch(error => {
         console.log(error);
-        res.status(400).json({ Error: 'retrieve document failed' });
+        res.status(400).json({ Error: 'Failed to retrieve vinyl record entry.' });
     });
 
 });
 
 
 // UPDATE controller ************************************
-app.put('/movies/:_id', (req, res) => {
-    movies.updateMovie(
+app.put('/vinyl/:_id', (req, res) => {
+    vinyl.updateVinyl(
         req.params._id, 
-        req.body.title, 
+        req.body.title,
+        req.body.artist, 
         req.body.year, 
-        req.body.language
+        req.body.length
     )
-    .then(movie => {
-        res.json(movie);
+    .then(vinyl => {
+        res.json(vinyl);
     })
     .catch(error => {
-        console.log(error);
-        res.status(400).json({ error: 'document update failed' });
+        console.log(vinyl);
+        res.status(400).json({ error: 'Failed to update vinyl record entry' });
     });
 });
 
 
 // DELETE Controller ******************************
-app.delete('/movies/:_id', (req, res) => {
-    movies.deleteMovieById(req.params._id)
+app.delete('/vinyl/:_id', (req, res) => {
+    movies.deleteVinylById(req.params._id)
         .then(deletedCount => {
             if (deletedCount === 1) {
                 res.status(204).send();
             } else {
-                res.status(404).json({ Error: 'document no longer exists' });
+                res.status(404).json({ Error: 'Vinyl entry no longer exists.' });
             }
         })
         .catch(error => {
             console.error(error);
-            res.send({ error: 'delete a document failed' });
+            res.send({ error: 'Failed to delete vinyl entry' });
         });
 });
 
