@@ -1,1 +1,1 @@
-Class project final.
+A simple web dev project
